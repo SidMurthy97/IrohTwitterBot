@@ -1,3 +1,6 @@
+import tweepy
+import webbrowser
+import os 
 
 def getQuote():
 
@@ -17,8 +20,29 @@ def getQuote():
         f.writelines(quotes)
 
 
-    print(quote)
+    return quote
+
+def Twitter_authenciate():
+    auth = tweepy.OAuthHandler(os.environ['TWITTER_API_KEY'],os.environ['TWITTER_SECRET_KEY'],'oob')
+    
+    try:
+        redirect_url = auth.get_authorization_url()
+    except tweepy.TweepError:
+        print('Error! Failed to get request token.')
+    
+    webbrowser.open(redirect_url)
+    user_pin_input = input("enter authorisation pin: ")
+
+    auth.get_access_token(user_pin_input)
+    api = tweepy.API(auth)
+
+    return api
+
+def tweet(quote,api):
+    api.update_status(quote)
 
 if __name__ == "__main__":
 
-    getQuote()
+    quote = getQuote()
+    api = Twitter_authenciate()
+    tweet(quote,api)
