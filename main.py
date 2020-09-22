@@ -1,21 +1,24 @@
-from bs4 import BeautifulSoup as soup
-import requests
-import re 
-
 
 def getQuote():
 
-    page = requests.get("https://everydaypower.com/uncle-iroh-quotes/")
-    Soup = soup(page.content,'html.parser')
+    filepath = 'quotes.txt'
+    with open(filepath,encoding="utf8") as fp:
+        quotes = fp.readlines()
+        index = int(quotes[0])
+        quote = quotes[index]
+    
+    newIndex = index+1
+    if newIndex > 10:
+        newIndex = 1
+    
+    quotes[0] = str(newIndex) + "\n"
 
-    for i in range(6,57):
-        if i == 29:
-            continue
-        else:
-        
-            quote = Soup.find_all('p')[i].get_text()
+    with open("quotes.txt", "w",encoding="utf8") as f:
+        f.writelines(quotes)
 
-            print(quote)
+
+    print(quote)
+
 if __name__ == "__main__":
 
     getQuote()
