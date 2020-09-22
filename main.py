@@ -11,7 +11,7 @@ def getQuote():
         quote = quotes[index]
     
     newIndex = index+1
-    if newIndex > 10:
+    if newIndex > 48:
         newIndex = 1
     
     quotes[0] = str(newIndex) + "\n"
@@ -39,7 +39,8 @@ def Twitter_authenciate():
     return api
 
 def tweet(quote,api):
-    api.update_status(quote)
+    tweet = quote + "#avatarthelastairbender #irohquotes"
+    api.update_status(tweet)
 
 if __name__ == "__main__":
 
