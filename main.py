@@ -49,7 +49,7 @@ def Twitter_authenciate():
     return api
 
 def tweet(quote,api):
-    tweet = quote + "#avatarthelastairbender #irohquotes"
+    tweet = quote + "#ATLA #irohquotes"
     api.update_status(tweet)
 
 if __name__ == "__main__":
