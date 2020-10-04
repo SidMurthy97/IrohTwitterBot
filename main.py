@@ -24,36 +24,39 @@ def getQuote():
 
     return quote
 
-def Twitter_authenciate():
+def first_time_authenciation():
+
     auth = tweepy.OAuthHandler(os.environ['TWITTER_API_KEY'],os.environ['TWITTER_SECRET_KEY'],'oob')
     
-    #uncomment for first time authenciation, it will save the object in a seperate file so you're authorised between script runs. 
+    try:
+        redirect_url = auth.get_authorization_url()
+    except tweepy.TweepError:
+        print('Error! Failed to get request token.')
     
-    # try:
-    #     redirect_url = auth.get_authorization_url()
-    # except tweepy.TweepError:
-    #     print('Error! Failed to get request token.')
-    
-    # webbrowser.open(redirect_url)
-    # user_pin_input = input("enter authorisation pin: ")
+    webbrowser.open(redirect_url)
+    user_pin_input = input("enter authorisation pin: ")
 
-    # auth.get_access_token(user_pin_input)
-    
+    auth.get_access_token(user_pin_input)
+
+    with open('apiObject.txt','wb') as file:
+        pickle.dump(auth,file)
+
+def load_authenciation():
+ 
     with open('apiObject.txt','rb') as file:
-    #     pickle.dump(auth,file)
         auth = pickle.load(file)
     
     api = tweepy.API(auth)
 
-
     return api
 
 def tweet(quote,api):
-    tweet = quote + "#avatarthelastairbender #irohquotes"
+    tweet = quote + "#avatarthelastairbender #ATLA"
     api.update_status(tweet)
 
 if __name__ == "__main__":
 
     quote = getQuote()
-    api = Twitter_authenciate()
+    first_time_authenciation()
+    api = load_authenciation()
     tweet(quote,api)
